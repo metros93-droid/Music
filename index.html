@@ -496,13 +496,7 @@
         }
 
         function enterFullscreen() {
-            const elem = document.documentElement;
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                try {
-                    if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
-                    else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen().catch(() => {});
-                } catch(e) {}
-            }
+            // PWA 모드에서는 하얀 상단바 오류를 유발하므로 전체화면 강제 전환을 비활성화합니다.
         }
 
         function updateShuffleUI() {
