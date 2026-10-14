@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" class="h-full w-full overflow-hidden">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -7,41 +7,35 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="TeD's music">
+    <meta name="apple-mobile-web-app-title" content="뮤직 플레이어">
     
     <!-- Neon Gradient App Icon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%2306b6d4'/><stop offset='50%' stop-color='%23a855f7'/><stop offset='100%' stop-color='%23ec4899'/></linearGradient></defs><rect width='512' height='512' rx='120' fill='%23070913'/><rect x='16' y='16' width='480' height='480' rx='108' fill='url(%23bg)' opacity='0.15'/><path d='M192 144 L368 256 L192 368 Z' fill='url(%23bg)'/><circle cx='380' cy='140' r='12' fill='%2322d3ee'/><circle cx='130' cy='370' r='16' fill='%23e879f9'/></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%2306b6d4'/><stop offset='50%' stop-color='%23a855f7'/><stop offset='100%' stop-color='%23ec4899'/></linearGradient></defs><rect width='512' height='512' rx='120' fill='%23070913'/><rect x='16' y='16' width='480' height='480' rx='108' fill='url(%23bg)' opacity='0.15'/><path d='M192 144 L368 256 L192 368 Z' fill='url(%23bg)'/><circle cx='380' cy='140' r='12' fill='%2322d3ee'/><circle cx='130' cy='370' r='16' fill='%23e879f9'/></svg>">
-    <link rel="manifest" href="data:application/manifest+json;utf8,{%22name%22:%22TeD's music%22,%22short_name%22:%22TeD's music%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22orientation%22:%22portrait%22,%22background_color%22:%22%23070913%22,%22theme_color%22:%22%23070913%22}">
+    <link rel="manifest" href="data:application/manifest+json;utf8,{%22name%22:%22모바일%20뮤직%20플레이어%22,%22short_name%22:%22뮤직플레이어%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22background_color%22:%22%23070913%22,%22theme_color%22:%22%23070913%22}">
     
-    <title>TeD's music</title>
+    <title>모바일 뮤직 플레이어</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root, html, body {
+        :root, html, body, :fullscreen, ::backdrop {
             background-color: #070913 !important;
             color: #f3f4f6;
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100dvh;
             overflow: hidden;
-            overscroll-behavior: none;
-            touch-action: pan-y;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        body {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            overscroll-behavior: none;
+            touch-action: manipulation;
         }
 
+        /* Custom Styles for Slider */
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
@@ -68,6 +62,7 @@
             outline: none;
         }
         
+        /* Disc Animation & Neon Ring */
         @keyframes spin-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -83,13 +78,20 @@
             padding: 4px;
             border-radius: 9999px;
             background: linear-gradient(135deg, #06b6d4, #a855f7, #ec4899);
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.4), 0 0 50px rgba(168, 85, 247, 0.3);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.4), 0 0 45px rgba(168, 85, 247, 0.3);
             transition: box-shadow 0.5s ease;
         }
         .neon-ring-outer.playing {
-            box-shadow: 0 0 40px rgba(6, 182, 212, 0.6), 0 0 70px rgba(236, 72, 153, 0.5);
+            box-shadow: 0 0 35px rgba(6, 182, 212, 0.6), 0 0 60px rgba(236, 72, 153, 0.5);
         }
 
+        .neon-text-gradient {
+            background: linear-gradient(135deg, #22d3ee 0%, #e879f9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Playlist Transition */
         .playlist-open {
             transform: translateY(0%);
         }
@@ -97,6 +99,7 @@
             transform: translateY(100%);
         }
 
+        /* Hide scrollbar */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -110,6 +113,7 @@
             mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
         }
 
+        /* Lyrics Highlight Styles */
         .lyric-line { 
             transition: all 0.3s ease; 
             transform-origin: center;
@@ -117,12 +121,12 @@
         .lyric-active { 
             color: #22d3ee; 
             font-weight: 700; 
-            transform: scale(1.12); 
+            transform: scale(1.15); 
             text-shadow: 0 0 12px rgba(34, 211, 238, 0.6), 0 0 20px rgba(232, 121, 249, 0.4);
         }
     </style>
 </head>
-<body class="font-sans h-full w-full overflow-hidden flex flex-col justify-between relative bg-[#070913] max-w-[440px] mx-auto border-x border-white/5">
+<body class="font-sans w-screen h-[100dvh] overflow-hidden flex flex-col selection:bg-cyan-500 selection:text-white relative bg-[#070913]">
 
     <div class="absolute -top-24 -left-24 w-72 h-72 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-fuchsia-600/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -131,29 +135,33 @@
     <header class="flex justify-between items-center px-6 py-3 bg-transparent z-10 w-full flex-shrink-0 pt-[calc(0.75rem+env(safe-area-inset-top))]">
         <div class="flex items-center gap-3">
             <button id="btnLoadMusic" class="text-gray-300 hover:text-white transition-all p-2.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 hover:border-cyan-500/50" title="음악 추가">
-                <i class="fas fa-folder-plus text-lg"></i>
+                <i class="fas fa-folder-plus text-base"></i>
             </button>
             <button id="btnInstallApp" class="text-cyan-400 hover:text-cyan-300 transition-all p-2.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 flex items-center justify-center" title="홈 화면에 설치">
-                <i class="fas fa-mobile-screen-button text-lg"></i>
+                <i class="fas fa-mobile-screen-button text-base"></i>
             </button>
         </div>
         <span class="text-xs font-bold tracking-widest text-cyan-400/80 uppercase">Now Playing</span>
         <button id="btnTogglePlaylist" class="text-gray-300 hover:text-white transition-all p-2.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 hover:border-cyan-500/50 relative">
-            <i class="fas fa-list-ul text-lg"></i>
+            <i class="fas fa-list-ul text-base"></i>
             <span id="playlistBadge" class="absolute -top-1 -right-1 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold hidden shadow-lg shadow-cyan-500/50">0</span>
         </button>
     </header>
 
+    <!-- Hidden File Input -->
     <input type="file" id="fileInput" multiple accept="audio/*" class="hidden">
 
-    <main class="flex-1 flex flex-col items-center justify-evenly px-6 w-full min-h-0 relative z-10 overflow-hidden">
+    <main id="mainContainer" class="flex-1 flex flex-col items-center justify-between py-2 px-6 w-full max-w-md mx-auto min-h-0 relative z-10 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         
-        <!-- Vinyl & Cover View -->
-        <div class="relative w-full flex-1 max-h-[300px] flex items-center justify-center my-auto">
-            <div id="neonRing" class="neon-ring-outer w-full max-w-[220px] aspect-square">
+        <!-- Visual Area (Vinyl + Gradient Neon Ring) -->
+        <div class="relative w-full flex-1 max-h-[280px] sm:max-h-[320px] flex items-center justify-center my-auto">
+            
+            <div id="neonRing" class="neon-ring-outer w-full max-w-[210px] sm:max-w-[240px] aspect-square">
                 <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center p-1 border border-white/10 cursor-pointer shadow-2xl relative" id="discContainer">
                     <div id="vinylDisc" class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center paused-spin relative overflow-hidden">
+                        <!-- Album Cover Image -->
                         <img id="albumCover" src="" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 z-10" alt="Album Cover" style="display: none;">
+                        <!-- Default Vinyl Grooves -->
                         <div class="w-full h-full rounded-full border border-white/5 flex items-center justify-center">
                             <div class="w-3/4 h-3/4 rounded-full border border-white/5 flex items-center justify-center">
                                 <div class="w-1/2 h-1/2 rounded-full border border-white/10 bg-cyan-500/10 flex items-center justify-center">
@@ -165,122 +173,125 @@
                 </div>
             </div>
 
-            <!-- Lyrics Overlay -->
-            <div id="inlineLyricsView" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[92%] h-[260px] bg-slate-950/40 backdrop-blur-md rounded-3xl z-30 flex flex-col hidden opacity-0 transition-opacity duration-300 overflow-hidden shadow-2xl border border-white/10 cursor-pointer">
+            <!-- Rectangular Lyrics Overlay -->
+            <div id="inlineLyricsView" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-[400px] h-[260px] bg-slate-950/90 backdrop-blur-md rounded-3xl z-30 flex flex-col hidden opacity-0 transition-opacity duration-300 overflow-hidden shadow-2xl border border-white/10 cursor-pointer">
                 <div id="lyricsScroll" class="w-full h-full overflow-y-auto no-scrollbar relative px-4 mask-image-y pointer-events-auto">
                     <div id="lyricsContent" class="text-center text-gray-200 text-base sm:text-lg py-[110px] relative font-medium">
                         가사 정보를 불러오는 중입니다...
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Song Info -->
-        <div class="text-center w-full flex-shrink-0 my-2">
-            <h2 id="songTitle" class="text-lg sm:text-xl font-bold truncate mb-1 text-white tracking-wide">음악을 선택해주세요</h2>
+        <div class="text-center w-full flex-shrink-0 my-1">
+            <h2 id="songTitle" class="text-lg sm:text-xl font-bold truncate mb-0.5 text-white tracking-wide">음악을 선택해주세요</h2>
             <p id="songArtist" class="text-gray-400 text-xs sm:text-sm font-medium">기기의 폴더에서 노래를 불러오세요</p>
         </div>
 
         <!-- Progress Bar -->
-        <div class="w-full flex-shrink-0 px-2 my-2">
+        <div class="w-full flex-shrink-0 px-2 my-1">
             <input type="range" id="progressBar" min="0" value="0" step="0.1" class="w-full" disabled>
             <div class="flex justify-between text-[11px] text-gray-400 mt-1.5 font-mono">
                 <span id="currentTime">00:00</span>
                 <span id="totalTime">00:00</span>
             </div>
         </div>
+
+        <!-- Controls -->
+        <div class="flex justify-between items-center w-full max-w-[270px] flex-shrink-0 py-1">
+            <button id="btnShuffle" class="text-gray-500 transition-colors p-2.5 focus:outline-none" title="셔플">
+                <i class="fas fa-random text-base"></i>
+            </button>
+            <button id="btnPrev" class="text-gray-300 hover:text-cyan-400 transition-colors p-2.5 focus:outline-none" title="이전 곡">
+                <i class="fas fa-step-backward text-xl"></i>
+            </button>
+            <button id="btnPlayPause" class="bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-pink-500 hover:opacity-90 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.5)] focus:outline-none transition-transform transform active:scale-95" title="재생 / 일시정지">
+                <i id="playPauseIcon" class="fas fa-play text-lg ml-0.5"></i>
+            </button>
+            <button id="btnNext" class="text-gray-300 hover:text-cyan-400 transition-colors p-2.5 focus:outline-none" title="다음 곡">
+                <i class="fas fa-step-forward text-xl"></i>
+            </button>
+            <button id="btnRepeat" class="text-gray-500 transition-colors p-2.5 focus:outline-none relative" title="반복 설정">
+                <i class="fas fa-redo text-base"></i>
+                <span id="repeatOneBadge" class="absolute top-1 right-1 text-[8px] bg-cyan-400 text-slate-950 font-bold rounded-full w-3 h-3 flex items-center justify-center hidden">1</span>
+            </button>
+        </div>
     </main>
 
-    <div id="playerControls" class="flex justify-between items-center w-full px-8 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-2 z-50 flex-shrink-0 bg-[#070913]">
-        <button id="btnShuffle" class="text-gray-500 transition-colors p-2 focus:outline-none" title="셔플">
-            <i class="fas fa-random text-base"></i>
-        </button>
-        <button id="btnPrev" class="text-gray-300 hover:text-cyan-400 transition-colors p-2 focus:outline-none" title="이전 곡">
-            <i class="fas fa-step-backward text-xl"></i>
-        </button>
-        <button id="btnPlayPause" class="bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-pink-500 hover:opacity-90 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.5)] focus:outline-none transition-transform transform active:scale-95" title="재생 / 일시정지">
-            <i id="playPauseIcon" class="fas fa-play text-lg ml-0.5"></i>
-        </button>
-        <button id="btnNext" class="text-gray-300 hover:text-cyan-400 transition-colors p-2 focus:outline-none" title="다음 곡">
-            <i class="fas fa-step-forward text-xl"></i>
-        </button>
-        <button id="btnRepeat" class="text-gray-500 transition-colors p-2 focus:outline-none relative" title="반복 설정">
-            <i class="fas fa-redo text-base"></i>
-            <span id="repeatOneBadge" class="absolute top-1 right-0 text-[8px] bg-cyan-400 text-slate-950 font-bold rounded-full w-3 h-3 flex items-center justify-center hidden">1</span>
-        </button>
-    </div>
-
-    <!-- Playlist Overlay -->
-    <div id="playlistView" class="absolute inset-x-0 top-0 bottom-[95px] bg-slate-950/95 backdrop-blur-xl border-b border-white/10 rounded-b-3xl shadow-2xl z-40 transition-transform duration-300 ease-in-out playlist-closed flex flex-col pt-[calc(0.5rem+env(safe-area-inset-top))]">
+    <div id="playlistView" class="absolute inset-x-0 bottom-0 h-[48dvh] bg-slate-950/95 backdrop-blur-xl border-t border-white/10 rounded-t-3xl shadow-2xl z-40 transition-transform duration-300 ease-in-out playlist-closed flex flex-col">
         <div class="flex justify-between items-center px-5 py-3.5 border-b border-white/10 shrink-0">
             <h3 class="text-base font-bold text-white">플레이리스트 (<span id="playlistCount" class="text-cyan-400">0</span>)</h3>
-            <div class="flex gap-3 items-center">
+            <div class="flex gap-4 items-center">
                 <button id="btnClearPlaylistBtn" class="text-rose-400 hover:text-rose-300 text-xs focus:outline-none px-2 py-1">비우기</button>
-                <button id="btnClosePlaylist" class="text-gray-400 hover:text-white focus:outline-none px-2">
-                    <i class="fas fa-chevron-up text-lg"></i>
+                <button id="btnClosePlaylist" class="text-gray-400 hover:text-white focus:outline-none px-2 py-1">
+                    <i class="fas fa-chevron-down text-lg"></i>
                 </button>
             </div>
         </div>
         
-        <ul id="playlistContainer" class="flex-1 overflow-y-auto p-3 no-scrollbar">
-            <li id="loadingIndicator" class="p-4 text-center text-gray-400 mt-10">
+        <ul id="playlistContainer" class="flex-1 overflow-y-auto p-3 no-scrollbar pb-8">
+            <li id="loadingIndicator" class="p-4 text-center text-gray-400 mt-6">
                 <i class="fas fa-spinner fa-spin text-2xl mb-3 text-cyan-400"></i>
                 <p class="text-xs">데이터를 불러오는 중입니다...</p>
             </li>
         </ul>
     </div>
 
-    <div id="playlistBackdrop" class="absolute inset-0 bg-black/60 z-30 hidden transition-opacity opacity-0 backdrop-blur-sm pointer-events-none"></div>
+    <!-- Backdrop for playlist -->
+    <div id="playlistBackdrop" class="absolute inset-0 bg-black/60 z-30 hidden transition-opacity opacity-0 backdrop-blur-sm"></div>
 
-    <!-- Install Modal with instructions to hide browser chrome -->
+    <!-- Install Modal -->
     <div id="installModal" class="absolute inset-0 bg-black/80 z-50 hidden items-center justify-center backdrop-blur-sm opacity-0 transition-opacity">
-        <div class="bg-slate-900 p-6 rounded-2xl w-[88%] max-w-xs text-center shadow-2xl border border-white/10 transform scale-95 transition-transform" id="installModalBox">
-            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl overflow-hidden shadow-lg border border-cyan-500/30 flex items-center justify-center bg-slate-950">
-                <i class="fas fa-compact-disc text-2xl text-cyan-400 animate-spin-slow"></i>
+        <div class="bg-slate-900 p-6 rounded-2xl w-[90%] max-w-sm text-center shadow-2xl border border-white/10 transform scale-95 transition-transform" id="installModalBox">
+            <div class="w-16 h-16 mx-auto mb-3 rounded-2xl overflow-hidden shadow-lg border border-cyan-500/30 flex items-center justify-center bg-slate-950">
+                <i class="fas fa-compact-disc text-3xl text-cyan-400 animate-spin-slow"></i>
             </div>
-            <h4 class="text-base font-bold mb-1 text-white">전체 화면 (앱)으로 실행</h4>
-            <p class="text-[11px] text-gray-400 mb-4">인터넷 주소창과 탐색기 메뉴 없이 첨부 이미지처럼 깔끔하게 실행하려면 아래 안내를 따라 홈 화면에 추가하세요.</p>
+            <h4 class="text-lg font-bold mb-1 text-white">홈 화면에 앱 설치</h4>
+            <p class="text-xs text-gray-400 mb-5">어플처럼 간편하게 실행할 수 있습니다.</p>
             
-            <button id="btnTriggerInstall" class="w-full py-2.5 mb-3 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 hidden">
+            <button id="btnTriggerInstall" class="w-full py-3 mb-4 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 hidden">
                 <i class="fas fa-download"></i> 지금 바로 설치
             </button>
 
-            <div class="text-left bg-slate-950/70 p-3 rounded-xl text-[11px] text-gray-300 space-y-2 border border-white/5 mb-4">
+            <div class="text-left bg-slate-950/70 p-4 rounded-xl text-xs text-gray-300 space-y-3 border border-white/5 mb-5">
                 <div>
-                    <p class="font-semibold text-cyan-400 mb-0.5"><i class="fab fa-apple mr-1"></i> iOS (Safari 브라우저):</p>
-                    <p class="text-gray-300">하단 <i class="fas fa-share-from-square text-cyan-400"></i> (공유) 버튼 탭 ➔ <strong class="text-white">'홈 화면에 추가'</strong></p>
+                    <p class="font-semibold text-cyan-400 mb-1"><i class="fab fa-apple mr-1"></i> iOS (Safari):</p>
+                    <p class="text-gray-300 leading-relaxed">하단 <i class="fas fa-share-from-square text-cyan-400"></i> (공유) 클릭 후 <br><strong class="text-white">'홈 화면에 추가'</strong> 선택</p>
                 </div>
-                <div class="border-t border-white/10 pt-1.5">
-                    <p class="font-semibold text-cyan-400 mb-0.5"><i class="fab fa-android mr-1"></i> Android (Chrome 브라우저):</p>
-                    <p class="text-gray-300">우측 상단 <i class="fas fa-ellipsis-vertical text-cyan-400"></i> 메뉴 탭 ➔ <strong class="text-white">'앱 설치'</strong> 또는 <strong class="text-white">'홈 화면에 추가'</strong></p>
+                <div class="border-t border-white/10 pt-2">
+                    <p class="font-semibold text-cyan-400 mb-1"><i class="fab fa-android mr-1"></i> Android (Chrome):</p>
+                    <p class="text-gray-300 leading-relaxed">우측 상단 <i class="fas fa-ellipsis-vertical text-cyan-400"></i> 클릭 후 <br><strong class="text-white">'앱 설치'</strong> 또는 <strong class="text-white">'홈 화면에 추가'</strong> 선택</p>
                 </div>
             </div>
 
-            <button id="btnCloseInstall" class="w-full py-2 rounded-xl bg-slate-800 text-gray-300 text-xs font-medium hover:bg-slate-700">닫기</button>
+            <button id="btnCloseInstall" class="w-full py-2.5 rounded-xl bg-slate-800 text-gray-300 font-medium hover:bg-slate-700">닫기</button>
         </div>
     </div>
 
-    <!-- Confirm Modal -->
+    <!-- Custom Confirm Modal -->
     <div id="confirmModal" class="absolute inset-0 bg-black/80 z-50 hidden items-center justify-center backdrop-blur-sm opacity-0 transition-opacity">
-        <div class="bg-slate-900 p-5 rounded-2xl w-[82%] max-w-xs text-center shadow-2xl border border-white/10 transform scale-95 transition-transform" id="confirmModalBox">
-            <div class="text-rose-400 mb-3 text-3xl">
+        <div class="bg-slate-900 p-6 rounded-2xl w-[85%] max-w-sm text-center shadow-2xl border border-white/10 transform scale-95 transition-transform" id="confirmModalBox">
+            <div class="text-rose-400 mb-4 text-3xl">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <h4 class="text-base font-bold mb-1 text-white">플레이리스트 비우기</h4>
+            <h4 class="text-base font-bold mb-2 text-white">플레이리스트 비우기</h4>
             <p class="text-gray-400 text-xs mb-5">목록의 모든 곡이 삭제됩니다.<br>계속하시겠습니까?</p>
-            <div class="flex gap-2.5 justify-center text-xs">
-                <button id="btnCancelClear" class="px-3 py-2.5 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-700 flex-1">취소</button>
-                <button id="btnConfirmClear" class="px-3 py-2.5 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 flex-1">비우기</button>
+            <div class="flex gap-3 justify-center">
+                <button id="btnCancelClear" class="px-4 py-2.5 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-700 flex-1 text-sm">취소</button>
+                <button id="btnConfirmClear" class="px-4 py-2.5 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 flex-1 text-sm">비우기</button>
             </div>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toastMsg" class="absolute top-16 left-1/2 transform -translate-x-1/2 bg-slate-800/90 backdrop-blur-md text-cyan-300 px-4 py-2 rounded-full shadow-xl z-50 transition-opacity opacity-0 pointer-events-none text-xs border border-cyan-500/30 text-center max-w-[85vw]">
+    <div id="toastMsg" class="absolute top-16 left-1/2 transform -translate-x-1/2 bg-slate-800/90 backdrop-blur-md text-cyan-300 px-4 py-2 rounded-full shadow-xl z-50 transition-opacity opacity-0 pointer-events-none text-xs border border-cyan-500/30 text-center max-w-[90vw]">
         알림 메시지
     </div>
 
     <script>
+        // --- State Management ---
         const state = {
             playlist: [],
             currentIndex: -1,
@@ -293,6 +304,7 @@
             pendingSeekTime: 0
         };
 
+        // --- DOM Elements ---
         const DOM = {
             fileInput: document.getElementById('fileInput'),
             btnLoadMusic: document.getElementById('btnLoadMusic'),
@@ -306,6 +318,7 @@
             playlistCount: document.getElementById('playlistCount'),
             playlistBadge: document.getElementById('playlistBadge'),
             loadingIndicator: document.getElementById('loadingIndicator'),
+            mainContainer: document.getElementById('mainContainer'),
             
             songTitle: document.getElementById('songTitle'),
             songArtist: document.getElementById('songArtist'),
@@ -400,38 +413,48 @@
             }
         });
 
+        // --- Touch Swipe Gesture Recognition (Left/Right swipe to toggle playlist) ---
         let touchStartX = 0;
         let touchStartY = 0;
 
-        document.body.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }
         }, { passive: true });
 
-        document.body.addEventListener('touchend', (e) => {
-            const touchEndX = e.changedTouches[0].screenX;
-            const touchEndY = e.changedTouches[0].screenY;
-            const diffX = touchEndX - touchStartX;
-            const diffY = touchEndY - touchStartY;
+        window.addEventListener('touchend', (e) => {
+            if (e.changedTouches.length === 1) {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndY = e.changedTouches[0].clientY;
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
 
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-                const isPlaylistOpen = DOM.playlistView.classList.contains('playlist-open');
-                if (diffX < 0 && !isPlaylistOpen) {
-                    togglePlaylist(true);
-                } else if (diffX > 0 && isPlaylistOpen) {
-                    togglePlaylist(false);
+                // Horizontal swipe detection (threshold: 65px horizontally, minimal vertical deviation)
+                if (Math.abs(diffX) > 65 && Math.abs(diffY) < 50) {
+                    const isOpen = DOM.playlistView.classList.contains('playlist-open');
+                    // Swipe left to close or swipe right to open
+                    if (diffX < 0 && isOpen) {
+                        togglePlaylist();
+                        showToast("곡 목록 닫기");
+                    } else if (diffX > 0 && !isOpen) {
+                        togglePlaylist();
+                        showToast("곡 목록 열기");
+                    }
                 }
             }
         }, { passive: true });
 
+        // --- Media Session API Integration ---
         function initMediaSession() {
             if (!('mediaSession' in navigator)) return;
 
             const actionHandlers = [
-                ['play', () => { playTrack(); showToast("재생됨"); }],
-                ['pause', () => { pauseTrack(); showToast("일시정지됨"); }],
-                ['previoustrack', () => { prevTrack(); }],
-                ['nexttrack', () => { nextTrack(); }],
+                ['play', () => playTrack()],
+                ['pause', () => pauseTrack()],
+                ['previoustrack', () => prevTrack()],
+                ['nexttrack', () => nextTrack()],
                 ['seekbackward', (details) => {
                     const skipTime = details.seekOffset || 10;
                     state.audio.currentTime = Math.max(state.audio.currentTime - skipTime, 0);
@@ -460,10 +483,10 @@
             if (!('mediaSession' in navigator)) return;
 
             const currentTrack = state.currentIndex >= 0 ? state.playlist[state.currentIndex] : null;
-            const title = currentTrack ? formatFileName(currentTrack.name) : "TeD's music";
+            const title = currentTrack ? formatFileName(currentTrack.name) : '모바일 뮤직 플레이어';
             const artist = (currentTrack && DOM.songArtist.textContent && DOM.songArtist.textContent !== '기기의 폴더에서 노래를 불러오세요') 
                 ? DOM.songArtist.textContent 
-                : "TeD's music";
+                : '모바일 플레이어';
 
             let artworkUrl = DOM.albumCover.src;
             if (!artworkUrl || DOM.albumCover.style.display === 'none') {
@@ -508,6 +531,7 @@
             }
         }
 
+        // --- IndexedDB Persistence ---
         const DB_NAME = 'MobileMusicPlayerDB';
         const DB_VERSION = 1;
         const STORE_NAME = 'playlist_tracks';
@@ -565,6 +589,7 @@
             });
         }
 
+        // --- Settings Management ---
         function saveSettings() {
             const settings = {
                 currentIndex: state.currentIndex,
@@ -621,6 +646,7 @@
             return filename.replace(/\.[^/.]+$/, "");
         }
 
+        // --- UI Updates ---
         function updatePlaylistUI() {
             DOM.playlistCount.textContent = state.playlist.length;
             
@@ -633,12 +659,12 @@
             
             if (state.playlist.length === 0) {
                 DOM.playlistContainer.innerHTML = `
-                    <li class="p-4 text-center text-gray-500 mt-10">
+                    <li class="p-4 text-center text-gray-500 mt-4">
                         <div class="w-12 h-12 mx-auto bg-slate-900 rounded-full flex items-center justify-center mb-3 border border-white/10">
                             <i class="fas fa-music text-xl opacity-50 text-cyan-400"></i>
                         </div>
-                        <p class="font-medium text-gray-300 text-sm">목록이 비어있습니다.</p>
-                        <p class="text-xs mt-1 text-gray-500">폴더 아이콘을 눌러<br>음악을 추가하세요.</p>
+                        <p class="font-medium text-gray-300 text-xs">목록이 비어있습니다.</p>
+                        <p class="text-[11px] mt-1 text-gray-500">폴더 아이콘을 눌러 음악을 추가하세요.</p>
                     </li>`;
                 return;
             }
@@ -651,11 +677,12 @@
                 
                 li.innerHTML = `
                     <div class="flex items-center overflow-hidden flex-1">
-                        <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 flex-shrink-0 border border-white/10 ${isActive ? 'text-cyan-400' : 'text-gray-500'}">
-                            ${isActive && state.isPlaying ? '<i class="fas fa-chart-simple text-xs animate-pulse"></i>' : '<i class="fas fa-music text-xs"></i>'}
+                        <div class="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center mr-3 flex-shrink-0 border border-white/10 ${isActive ? 'text-cyan-400' : 'text-gray-500'}">
+                            ${isActive && state.isPlaying ? '<i class="fas fa-chart-simple animate-pulse text-xs"></i>' : '<i class="fas fa-music text-xs"></i>'}
                         </div>
                         <div class="truncate pr-3">
                             <p class="truncate text-xs sm:text-sm font-medium ${isActive ? 'text-cyan-400 font-bold' : 'text-gray-200'}">${formatFileName(track.name)}</p>
+                            <p class="text-[10px] text-gray-500 truncate">Saved in Browser</p>
                         </div>
                     </div>
                     <button class="text-gray-500 hover:text-rose-400 p-2 ml-1 delete-btn rounded-full hover:bg-slate-800" data-index="${index}">
@@ -666,7 +693,7 @@
                 li.addEventListener('click', (e) => {
                     if(!e.target.closest('.delete-btn')) {
                         playTrack(index);
-                        togglePlaylist(false);
+                        togglePlaylist();
                     }
                 });
 
@@ -731,9 +758,10 @@
             updatePlayPauseUI();
         }
 
+        // --- STREAMING_CHUNK:Parsing metadata and handling audio playback events... ---
         function parseMetadata(file) {
             if (!window.jsmediatags) {
-                DOM.lyricsContent.innerHTML = '<p class="text-gray-500">메타데이터 파서를 불러올 수 없습니다.</p>';
+                DOM.lyricsContent.innerHTML = '<p class="text-gray-500 text-xs">메타데이터 파서를 불러올 수 없습니다.</p>';
                 return;
             }
             
@@ -766,7 +794,7 @@
                     if (typeof lyricsText === 'string' && lyricsText.trim().length > 0) {
                         parseLRC(lyricsText);
                     } else {
-                        DOM.lyricsContent.innerHTML = '<p class="text-gray-500">등록된 가사 정보가 없습니다.</p>';
+                        DOM.lyricsContent.innerHTML = '<p class="text-gray-500 text-xs">등록된 가사 정보가 없습니다.</p>';
                     }
                     
                     updateMediaSession();
@@ -774,7 +802,7 @@
                 onError: function() {
                     DOM.albumCover.style.display = 'none';
                     DOM.albumCover.src = '';
-                    DOM.lyricsContent.innerHTML = '<p class="text-gray-500">가사 정보를 읽을 수 없습니다.</p>';
+                    DOM.lyricsContent.innerHTML = '<p class="text-gray-500 text-xs">가사 정보를 읽을 수 없습니다.</p>';
                     updateMediaSession();
                 }
             });
@@ -805,7 +833,7 @@
                 state.parsedLyrics.sort((a, b) => a.time - b.time);
                 renderSyncedLyrics();
             } else {
-                DOM.lyricsContent.innerHTML = lines.map(l => `<p class="mb-2">${l || '<br>'}</p>`).join('');
+                DOM.lyricsContent.innerHTML = lines.map(l => `<p class="mb-3 text-xs sm:text-sm">${l || '<br>'}</p>`).join('');
                 state.parsedLyrics = [];
             }
         }
@@ -814,11 +842,12 @@
             DOM.lyricsContent.innerHTML = '';
             state.parsedLyrics.forEach((lyric, index) => {
                 const p = document.createElement('p');
-                p.className = 'lyric-line mb-4 text-gray-400 cursor-pointer hover:text-gray-200 w-full break-words';
+                p.className = 'lyric-line mb-3 text-gray-400 cursor-pointer hover:text-gray-200 w-full break-words text-xs sm:text-sm';
                 p.style.lineHeight = '1.5';
                 p.id = `lyric-${index}`;
                 p.textContent = lyric.text;
                 p.addEventListener('click', () => {
+                    if (isLyricsScrolling) return;
                     state.audio.currentTime = lyric.time;
                     if(!state.isPlaying) playTrack();
                 });
@@ -865,7 +894,7 @@
             DOM.songArtist.textContent = "로딩 중...";
             DOM.albumCover.style.display = 'none';
             DOM.albumCover.classList.add('opacity-0');
-            DOM.lyricsContent.innerHTML = '<p class="text-gray-500">정보 분석 중...</p>';
+            DOM.lyricsContent.innerHTML = '<p class="text-gray-500 text-xs">정보 분석 중...</p>';
             state.parsedLyrics = [];
             state.lastLyricIndex = -1;
             
@@ -954,6 +983,7 @@
             updatePlaylistUI();
         }
 
+        // --- STREAMING_CHUNK:Setting up player event bindings and initializers... ---
         let lastSavedSec = -1;
 
         state.audio.addEventListener('loadedmetadata', () => {
@@ -1047,7 +1077,15 @@
         }
         
         DOM.discContainer.addEventListener('click', toggleLyrics);
-        DOM.inlineLyricsView.addEventListener('click', toggleLyrics);
+        
+        let isLyricsScrolling = false;
+        DOM.inlineLyricsView.addEventListener('click', () => {
+            if (isLyricsScrolling) {
+                isLyricsScrolling = false;
+                return;
+            }
+            toggleLyrics();
+        });
 
         DOM.btnRepeat.addEventListener('click', () => {
             state.repeatMode = (state.repeatMode + 1) % 3;
@@ -1090,11 +1128,9 @@
             DOM.fileInput.value = '';
         });
 
-        function togglePlaylist(forceState) {
+        function togglePlaylist() {
             const isOpen = DOM.playlistView.classList.contains('playlist-open');
-            const shouldOpen = forceState !== undefined ? forceState : !isOpen;
-
-            if (!shouldOpen) {
+            if (isOpen) {
                 DOM.playlistView.classList.remove('playlist-open');
                 DOM.playlistView.classList.add('playlist-closed');
                 DOM.playlistBackdrop.classList.add('hidden');
@@ -1106,6 +1142,7 @@
                 DOM.playlistView.classList.remove('playlist-closed');
                 DOM.playlistView.classList.add('playlist-open');
                 DOM.playlistBackdrop.classList.remove('hidden');
+                DOM.playlistView.style.display = 'flex';
                 setTimeout(() => {
                     DOM.playlistBackdrop.classList.remove('opacity-0');
                     DOM.playlistBackdrop.classList.add('opacity-100');
@@ -1113,8 +1150,9 @@
             }
         }
 
-        DOM.btnTogglePlaylist.addEventListener('click', () => togglePlaylist());
-        DOM.btnClosePlaylist.addEventListener('click', () => togglePlaylist(false));
+        DOM.btnTogglePlaylist.addEventListener('click', togglePlaylist);
+        DOM.btnClosePlaylist.addEventListener('click', togglePlaylist);
+        DOM.playlistBackdrop.addEventListener('click', togglePlaylist);
 
         function showConfirmModal() {
             if(state.playlist.length === 0) {
@@ -1157,6 +1195,7 @@
             showToast("플레이리스트가 초기화되었습니다");
         });
 
+        // App Initialization
         window.addEventListener('DOMContentLoaded', async () => {
             initMediaSession();
             try {
@@ -1170,7 +1209,7 @@
                     if (state.currentIndex >= 0 && state.currentIndex < state.playlist.length) {
                         const savedTime = state.pendingSeekTime;
                         loadTrack(state.currentIndex, false, savedTime);
-                        DOM.songArtist.textContent = "오프라인 보관함 (재개 대기중)";
+                        DOM.songArtist.textContent = "Offline Library (재개 대기중)";
                     } else {
                         state.currentIndex = -1;
                         resetUI();
