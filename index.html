@@ -34,13 +34,15 @@
             -webkit-user-select: none;
         }
 
-        /* Prevent side bouncing or horizontal scrolling */
+        /* Lock viewport bounds to 100% of visible viewport and dynamic height */
         body {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
+            height: 100vh;
+            height: 100dvh;
         }
 
         /* Custom Styles for Slider */
@@ -135,19 +137,19 @@
     <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-fuchsia-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- Top Bar Header -->
-    <header class="flex justify-between items-center px-6 py-3 bg-transparent z-10 w-full flex-shrink-0 pt-[calc(0.75rem+env(safe-area-inset-top))]">
+    <header class="flex justify-between items-center px-6 py-2 bg-transparent z-10 w-full flex-shrink-0 pt-[calc(0.5rem+env(safe-area-inset-top))]">
         <div class="flex items-center gap-3">
-            <button id="btnLoadMusic" class="text-gray-300 hover:text-white transition-all p-2.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 hover:border-cyan-500/50" title="음악 추가">
-                <i class="fas fa-folder-plus text-lg"></i>
+            <button id="btnLoadMusic" class="text-gray-300 hover:text-white transition-all p-2 rounded-full backdrop-blur-md bg-white/5 border border-white/10 hover:border-cyan-500/50" title="음악 추가">
+                <i class="fas fa-folder-plus text-base"></i>
             </button>
-            <button id="btnInstallApp" class="text-cyan-400 hover:text-cyan-300 transition-all p-2.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 flex items-center justify-center" title="홈 화면에 설치">
-                <i class="fas fa-mobile-screen-button text-lg"></i>
+            <button id="btnInstallApp" class="text-cyan-400 hover:text-cyan-300 transition-all p-2 rounded-full backdrop-blur-md bg-white/5 border border-white/10 flex items-center justify-center" title="홈 화면에 설치">
+                <i class="fas fa-mobile-screen-button text-base"></i>
             </button>
         </div>
-        <span class="text-xs font-bold tracking-widest text-cyan-400/80 uppercase">Now Playing</span>
-        <button id="btnTogglePlaylist" class="text-gray-300 hover:text-white transition-all p-2.5 rounded-full backdrop-blur-md bg-white/5 border border-white/10 hover:border-cyan-500/50 relative">
-            <i class="fas fa-list-ul text-lg"></i>
-            <span id="playlistBadge" class="absolute -top-1 -right-1 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold hidden shadow-lg shadow-cyan-500/50">0</span>
+        <span class="text-[11px] font-bold tracking-widest text-cyan-400/80 uppercase">Now Playing</span>
+        <button id="btnTogglePlaylist" class="text-gray-300 hover:text-white transition-all p-2 rounded-full backdrop-blur-md bg-white/5 border border-white/10 hover:border-cyan-500/50 relative">
+            <i class="fas fa-list-ul text-base"></i>
+            <span id="playlistBadge" class="absolute -top-1 -right-1 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold hidden shadow-lg shadow-cyan-500/50">0</span>
         </button>
     </header>
 
@@ -155,11 +157,11 @@
     <input type="file" id="fileInput" multiple accept="audio/*" class="hidden">
 
     <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col items-center justify-evenly px-6 w-full min-h-0 relative z-10 overflow-hidden">
+    <main class="flex-1 flex flex-col items-center justify-evenly px-6 w-full min-h-0 relative z-10 overflow-hidden py-1">
         
         <!-- Visual Area (Vinyl + Gradient Neon Ring) -->
-        <div class="relative w-full flex-1 max-h-[300px] flex items-center justify-center my-auto">
-            <div id="neonRing" class="neon-ring-outer w-full max-w-[220px] aspect-square">
+        <div class="relative w-full flex-1 max-h-[250px] flex items-center justify-center my-auto">
+            <div id="neonRing" class="neon-ring-outer w-full max-w-[190px] aspect-square">
                 <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center p-1 border border-white/10 cursor-pointer shadow-2xl relative" id="discContainer">
                     <div id="vinylDisc" class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center paused-spin relative overflow-hidden">
                         <!-- Album Cover Image -->
@@ -168,7 +170,7 @@
                         <div class="w-full h-full rounded-full border border-white/5 flex items-center justify-center">
                             <div class="w-3/4 h-3/4 rounded-full border border-white/5 flex items-center justify-center">
                                 <div class="w-1/2 h-1/2 rounded-full border border-white/10 bg-cyan-500/10 flex items-center justify-center">
-                                    <div class="w-4 h-4 rounded-full bg-cyan-400/60 shadow-[0_0_10px_#22d3ee]"></div>
+                                    <div class="w-3.5 h-3.5 rounded-full bg-cyan-400/60 shadow-[0_0_10px_#22d3ee]"></div>
                                 </div>
                             </div>
                         </div>
@@ -177,9 +179,9 @@
             </div>
 
             <!-- Rectangular Lyrics Overlay -->
-            <div id="inlineLyricsView" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[92%] h-[260px] bg-slate-950/40 backdrop-blur-md rounded-3xl z-30 flex flex-col hidden opacity-0 transition-opacity duration-300 overflow-hidden shadow-2xl border border-white/10 cursor-pointer">
+            <div id="inlineLyricsView" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[92%] h-[220px] bg-slate-950/80 backdrop-blur-md rounded-3xl z-30 flex flex-col hidden opacity-0 transition-opacity duration-300 overflow-hidden shadow-2xl border border-white/10 cursor-pointer">
                 <div id="lyricsScroll" class="w-full h-full overflow-y-auto no-scrollbar relative px-4 mask-image-y pointer-events-auto">
-                    <div id="lyricsContent" class="text-center text-gray-200 text-base sm:text-lg py-[110px] relative font-medium">
+                    <div id="lyricsContent" class="text-center text-gray-200 text-sm sm:text-base py-[90px] relative font-medium">
                         가사 정보를 불러오는 중입니다...
                     </div>
                 </div>
@@ -187,15 +189,15 @@
         </div>
 
         <!-- Song Info -->
-        <div class="text-center w-full flex-shrink-0 my-2">
-            <h2 id="songTitle" class="text-lg sm:text-xl font-bold truncate mb-1 text-white tracking-wide">음악을 선택해주세요</h2>
-            <p id="songArtist" class="text-gray-400 text-xs sm:text-sm font-medium">기기의 폴더에서 노래를 불러오세요</p>
+        <div class="text-center w-full flex-shrink-0 my-1">
+            <h2 id="songTitle" class="text-base sm:text-lg font-bold truncate mb-0.5 text-white tracking-wide">음악을 선택해주세요</h2>
+            <p id="songArtist" class="text-gray-400 text-[11px] sm:text-xs font-medium">기기의 폴더에서 노래를 불러오세요</p>
         </div>
 
         <!-- Progress Bar -->
-        <div class="w-full flex-shrink-0 px-2 my-2">
+        <div class="w-full flex-shrink-0 px-2 my-1">
             <input type="range" id="progressBar" min="0" value="0" step="0.1" class="w-full" disabled>
-            <div class="flex justify-between text-[11px] text-gray-400 mt-1.5 font-mono">
+            <div class="flex justify-between text-[10px] text-gray-400 mt-1 font-mono">
                 <span id="currentTime">00:00</span>
                 <span id="totalTime">00:00</span>
             </div>
@@ -203,40 +205,40 @@
     </main>
 
     <!-- Controls Area (Always Visible at Bottom) -->
-    <div id="playerControls" class="flex justify-between items-center w-full px-8 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-2 z-50 flex-shrink-0 bg-[#070913]">
+    <div id="playerControls" class="flex justify-between items-center w-full px-6 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-2 z-50 flex-shrink-0 bg-[#070913]">
         <button id="btnShuffle" class="text-gray-500 transition-colors p-2 focus:outline-none" title="셔플">
-            <i class="fas fa-random text-base"></i>
+            <i class="fas fa-random text-sm"></i>
         </button>
-        <button id="btnPrev" class="text-gray-300 hover:text-cyan-400 transition-colors p-2 focus:outline-none" title="이전 곡 (뒤로 가기)">
-            <i class="fas fa-step-backward text-xl"></i>
+        <button id="btnPrev" class="text-gray-300 hover:text-cyan-400 transition-colors p-2 focus:outline-none" title="이전 곡">
+            <i class="fas fa-step-backward text-lg"></i>
         </button>
-        <button id="btnPlayPause" class="bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-pink-500 hover:opacity-90 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.5)] focus:outline-none transition-transform transform active:scale-95" title="재생 / 일시정지">
-            <i id="playPauseIcon" class="fas fa-play text-lg ml-0.5"></i>
+        <button id="btnPlayPause" class="bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-pink-500 hover:opacity-90 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.5)] focus:outline-none transition-transform transform active:scale-95" title="재생 / 일시정지">
+            <i id="playPauseIcon" class="fas fa-play text-base ml-0.5"></i>
         </button>
-        <button id="btnNext" class="text-gray-300 hover:text-cyan-400 transition-colors p-2 focus:outline-none" title="다음 곡 (앞으로 가기)">
-            <i class="fas fa-step-forward text-xl"></i>
+        <button id="btnNext" class="text-gray-300 hover:text-cyan-400 transition-colors p-2 focus:outline-none" title="다음 곡">
+            <i class="fas fa-step-forward text-lg"></i>
         </button>
         <button id="btnRepeat" class="text-gray-500 transition-colors p-2 focus:outline-none relative" title="반복 설정">
-            <i class="fas fa-redo text-base"></i>
-            <span id="repeatOneBadge" class="absolute top-1 right-0 text-[8px] bg-cyan-400 text-slate-950 font-bold rounded-full w-3 h-3 flex items-center justify-center hidden">1</span>
+            <i class="fas fa-redo text-sm"></i>
+            <span id="repeatOneBadge" class="absolute top-1 right-0 text-[7px] bg-cyan-400 text-slate-950 font-bold rounded-full w-3 h-3 flex items-center justify-center hidden">1</span>
         </button>
     </div>
 
-    <!-- Playlist Overlay (Sized to keep controls visible at bottom) -->
-    <div id="playlistView" class="absolute inset-x-0 top-0 bottom-[95px] bg-slate-950/95 backdrop-blur-xl border-b border-white/10 rounded-b-3xl shadow-2xl z-40 transition-transform duration-300 ease-in-out playlist-closed flex flex-col pt-[calc(0.5rem+env(safe-area-inset-top))]">
-        <div class="flex justify-between items-center px-5 py-3.5 border-b border-white/10 shrink-0">
-            <h3 class="text-base font-bold text-white">플레이리스트 (<span id="playlistCount" class="text-cyan-400">0</span>)</h3>
+    <!-- Playlist Overlay -->
+    <div id="playlistView" class="absolute inset-x-0 top-0 bottom-[80px] bg-slate-950/95 backdrop-blur-xl border-b border-white/10 rounded-b-3xl shadow-2xl z-40 transition-transform duration-300 ease-in-out playlist-closed flex flex-col pt-[calc(0.5rem+env(safe-area-inset-top))]">
+        <div class="flex justify-between items-center px-5 py-3 border-b border-white/10 shrink-0">
+            <h3 class="text-sm font-bold text-white">플레이리스트 (<span id="playlistCount" class="text-cyan-400">0</span>)</h3>
             <div class="flex gap-3 items-center">
-                <button id="btnClearPlaylistBtn" class="text-rose-400 hover:text-rose-300 text-xs focus:outline-none px-2 py-1">비우기</button>
+                <button id="btnClearPlaylistBtn" class="text-rose-400 hover:text-rose-300 text-[11px] focus:outline-none px-2 py-1">비우기</button>
                 <button id="btnClosePlaylist" class="text-gray-400 hover:text-white focus:outline-none px-2">
-                    <i class="fas fa-chevron-up text-lg"></i>
+                    <i class="fas fa-chevron-up text-base"></i>
                 </button>
             </div>
         </div>
         
         <ul id="playlistContainer" class="flex-1 overflow-y-auto p-3 no-scrollbar">
             <li id="loadingIndicator" class="p-4 text-center text-gray-400 mt-10">
-                <i class="fas fa-spinner fa-spin text-2xl mb-3 text-cyan-400"></i>
+                <i class="fas fa-spinner fa-spin text-xl mb-2 text-cyan-400"></i>
                 <p class="text-xs">데이터를 불러오는 중입니다...</p>
             </li>
         </ul>
@@ -247,25 +249,25 @@
 
     <!-- Install Modal -->
     <div id="installModal" class="absolute inset-0 bg-black/80 z-50 hidden items-center justify-center backdrop-blur-sm opacity-0 transition-opacity">
-        <div class="bg-slate-900 p-6 rounded-2xl w-[88%] max-w-xs text-center shadow-2xl border border-white/10 transform scale-95 transition-transform" id="installModalBox">
-            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl overflow-hidden shadow-lg border border-cyan-500/30 flex items-center justify-center bg-slate-950">
-                <i class="fas fa-compact-disc text-2xl text-cyan-400 animate-spin-slow"></i>
+        <div class="bg-slate-900 p-5 rounded-2xl w-[88%] max-w-xs text-center shadow-2xl border border-white/10 transform scale-95 transition-transform" id="installModalBox">
+            <div class="w-12 h-12 mx-auto mb-2.5 rounded-2xl overflow-hidden shadow-lg border border-cyan-500/30 flex items-center justify-center bg-slate-950">
+                <i class="fas fa-compact-disc text-xl text-cyan-400 animate-spin-slow"></i>
             </div>
-            <h4 class="text-base font-bold mb-1 text-white">홈 화면에 앱 설치</h4>
-            <p class="text-[11px] text-gray-400 mb-4">GitHub Pages 등에서 어플처럼 간편하게 실행할 수 있습니다.</p>
+            <h4 class="text-sm font-bold mb-1 text-white">홈 화면에 전체화면 앱 설치</h4>
+            <p class="text-[10px] text-gray-400 mb-3">주소창과 하단 메뉴 없는 완벽한 전체화면 앱으로 실행됩니다.</p>
             
-            <button id="btnTriggerInstall" class="w-full py-2.5 mb-3 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 hidden">
-                <i class="fas fa-download"></i> 지금 바로 설치
+            <button id="btnTriggerInstall" class="w-full py-2 mb-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 hidden">
+                <i class="fas fa-download"></i> 지금 바로 설치하기
             </button>
 
-            <div class="text-left bg-slate-950/70 p-3 rounded-xl text-[11px] text-gray-300 space-y-2 border border-white/5 mb-4">
+            <div class="text-left bg-slate-950/70 p-2.5 rounded-xl text-[10px] text-gray-300 space-y-1.5 border border-white/5 mb-3">
                 <div>
-                    <p class="font-semibold text-cyan-400 mb-0.5"><i class="fab fa-apple mr-1"></i> iOS (Safari):</p>
-                    <p class="text-gray-300">하단 <i class="fas fa-share-from-square text-cyan-400"></i> (공유) 클릭 후 <strong class="text-white">'홈 화면에 추가'</strong></p>
+                    <p class="font-semibold text-cyan-400"><i class="fab fa-apple mr-1"></i> iOS (Safari):</p>
+                    <p class="text-gray-300">하단 <i class="fas fa-share-from-square text-cyan-400"></i> 공유 버튼 누른 후 <strong class="text-white">'홈 화면에 추가'</strong></p>
                 </div>
-                <div class="border-t border-white/10 pt-1.5">
-                    <p class="font-semibold text-cyan-400 mb-0.5"><i class="fab fa-android mr-1"></i> Android (Chrome):</p>
-                    <p class="text-gray-300">우측 상단 <i class="fas fa-ellipsis-vertical text-cyan-400"></i> 클릭 후 <strong class="text-white">'앱 설치'</strong> 선택</p>
+                <div class="border-t border-white/10 pt-1">
+                    <p class="font-semibold text-cyan-400"><i class="fab fa-android mr-1"></i> Android (Chrome):</p>
+                    <p class="text-gray-300">우측 상단 메뉴 <i class="fas fa-ellipsis-vertical text-cyan-400"></i> 누른 후 <strong class="text-white">'앱 설치'</strong> 선택</p>
                 </div>
             </div>
 
@@ -276,20 +278,20 @@
     <!-- Custom Confirm Modal -->
     <div id="confirmModal" class="absolute inset-0 bg-black/80 z-50 hidden items-center justify-center backdrop-blur-sm opacity-0 transition-opacity">
         <div class="bg-slate-900 p-5 rounded-2xl w-[82%] max-w-xs text-center shadow-2xl border border-white/10 transform scale-95 transition-transform" id="confirmModalBox">
-            <div class="text-rose-400 mb-3 text-3xl">
+            <div class="text-rose-400 mb-2.5 text-2xl">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <h4 class="text-base font-bold mb-1 text-white">플레이리스트 비우기</h4>
-            <p class="text-gray-400 text-xs mb-5">목록의 모든 곡이 삭제됩니다.<br>계속하시겠습니까?</p>
-            <div class="flex gap-2.5 justify-center text-xs">
-                <button id="btnCancelClear" class="px-3 py-2.5 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-700 flex-1">취소</button>
-                <button id="btnConfirmClear" class="px-3 py-2.5 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 flex-1">비우기</button>
+            <h4 class="text-sm font-bold mb-1 text-white">플레이리스트 비우기</h4>
+            <p class="text-gray-400 text-[11px] mb-4">목록의 모든 곡이 삭제됩니다.<br>계속하시겠습니까?</p>
+            <div class="flex gap-2 justify-center text-xs">
+                <button id="btnCancelClear" class="px-3 py-2 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-700 flex-1">취소</button>
+                <button id="btnConfirmClear" class="px-3 py-2 rounded-xl bg-rose-500 text-white font-medium hover:bg-rose-600 flex-1">비우기</button>
             </div>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toastMsg" class="absolute top-16 left-1/2 transform -translate-x-1/2 bg-slate-800/90 backdrop-blur-md text-cyan-300 px-4 py-2 rounded-full shadow-xl z-50 transition-opacity opacity-0 pointer-events-none text-xs border border-cyan-500/30 text-center max-w-[85vw]">
+    <div id="toastMsg" class="absolute top-14 left-1/2 transform -translate-x-1/2 bg-slate-800/90 backdrop-blur-md text-cyan-300 px-3.5 py-1.5 rounded-full shadow-xl z-50 transition-opacity opacity-0 pointer-events-none text-[11px] border border-cyan-500/30 text-center max-w-[85vw]">
         알림 메시지
     </div>
 
@@ -415,7 +417,7 @@
             }
         });
 
-        // --- Touch Gestures (Swipe Left to Open Playlist, Swipe Right to Close) ---
+        // --- Touch Gestures ---
         let touchStartX = 0;
         let touchStartY = 0;
 
@@ -430,14 +432,11 @@
             const diffX = touchEndX - touchStartX;
             const diffY = touchEndY - touchStartY;
 
-            // Ensure horizontal swipe is dominant
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
                 const isPlaylistOpen = DOM.playlistView.classList.contains('playlist-open');
                 if (diffX < 0 && !isPlaylistOpen) {
-                    // Swipe Left -> Open Playlist
                     togglePlaylist(true);
                 } else if (diffX > 0 && isPlaylistOpen) {
-                    // Swipe Right -> Close Playlist
                     togglePlaylist(false);
                 }
             }
@@ -448,10 +447,10 @@
             if (!('mediaSession' in navigator)) return;
 
             const actionHandlers = [
-                ['play', () => { playTrack(); showToast("알림/이어폰: 재생"); }],
-                ['pause', () => { pauseTrack(); showToast("알림/이어폰: 일시정지"); }],
-                ['previoustrack', () => { prevTrack(); showToast("이어폰(3회 탭)/알림: 이전 곡"); }],
-                ['nexttrack', () => { nextTrack(); showToast("이어폰(2회 탭)/알림: 다음 곡"); }],
+                ['play', () => { playTrack(); showToast("재생"); }],
+                ['pause', () => { pauseTrack(); showToast("일시정지"); }],
+                ['previoustrack', () => { prevTrack(); }],
+                ['nexttrack', () => { nextTrack(); }],
                 ['seekbackward', (details) => {
                     const skipTime = details.seekOffset || 10;
                     state.audio.currentTime = Math.max(state.audio.currentTime - skipTime, 0);
@@ -661,7 +660,7 @@
                             <i class="fas fa-music text-xl opacity-50 text-cyan-400"></i>
                         </div>
                         <p class="font-medium text-gray-300 text-sm">목록이 비어있습니다.</p>
-                        <p class="text-xs mt-1 text-gray-500">좌측 상단의 폴더 아이콘을 눌러<br>음악을 추가하세요.</p>
+                        <p class="text-xs mt-1 text-gray-500">상단의 폴더 아이콘을 눌러<br>음악을 추가하세요.</p>
                     </li>`;
                 return;
             }
@@ -721,7 +720,7 @@
 
         function updatePlayPauseUI() {
             if (state.isPlaying) {
-                DOM.playPauseIcon.className = 'fas fa-pause text-lg';
+                DOM.playPauseIcon.className = 'fas fa-pause text-base';
                 DOM.vinylDisc.classList.remove('paused-spin');
                 DOM.vinylDisc.classList.add('animate-spin-slow');
                 DOM.neonRing.classList.add('playing');
@@ -729,7 +728,7 @@
                     navigator.mediaSession.playbackState = 'playing';
                 }
             } else {
-                DOM.playPauseIcon.className = 'fas fa-play text-lg ml-0.5';
+                DOM.playPauseIcon.className = 'fas fa-play text-base ml-0.5';
                 DOM.vinylDisc.classList.add('paused-spin');
                 DOM.neonRing.classList.remove('playing');
                 if ('mediaSession' in navigator) {
@@ -838,8 +837,8 @@
             DOM.lyricsContent.innerHTML = '';
             state.parsedLyrics.forEach((lyric, index) => {
                 const p = document.createElement('p');
-                p.className = 'lyric-line mb-4 text-gray-400 cursor-pointer hover:text-gray-200 w-full break-words';
-                p.style.lineHeight = '1.5';
+                p.className = 'lyric-line mb-3 text-gray-400 cursor-pointer hover:text-gray-200 w-full break-words';
+                p.style.lineHeight = '1.4';
                 p.id = `lyric-${index}`;
                 p.textContent = lyric.text;
                 p.addEventListener('click', () => {
@@ -1196,6 +1195,7 @@
                     
                     if (state.currentIndex >= 0 && state.currentIndex < state.playlist.length) {
                         const savedTime = state.pendingSeekTime;
+                        loadTaskId = state.currentIndex;
                         loadTrack(state.currentIndex, false, savedTime);
                         DOM.songArtist.textContent = "Offline Library (재개 대기중)";
                     } else {
